@@ -200,7 +200,7 @@ we note that in the system status- lease expiration is set to true
 
 ### Step 3: kill and refresh
 
-run '''Stop-Process -Id <PID> -Force``` in your powershell.
+run ```Stop-Process -Id <PID> -Force``` in your powershell.
 
 
 we see there is no warning text, and the service will remain up for the lease period. 
@@ -220,6 +220,29 @@ we see that when looking at self preservation mode, eureka can have 2 different 
 when self preservation is off, consistency is prioritized. for zombie instances, the registry will immediately remove the service when the lease expires.
 
 when its on, availability is prioritized, with zombie instances in mind, eureka will list the service as up even if its not. 
+
+
+## Diagram 
+
+service discovery sequence
+
+<img width="492" height="567" alt="image" src="https://github.com/user-attachments/assets/6ee97bf1-0073-4c12-b9f9-799851f00abe" />
+
+
+logic for server decision
+
+<img width="636" height="495" alt="image" src="https://github.com/user-attachments/assets/2cf9ea04-278c-452d-a649-1ec7e8f562ec" />
+
+Renewal<sub>threshold</sub> = (Total Instances * Renewals per minute) * threshold percentance(.85 by default) 
+
+When a new service is registered, the threshold is recalculated, allowing for automatic scaling. 
+
+
+## Conclusion
+
+To conclude, I found that eureka's heartbeat isn't as much of a bottleneck as we thought to be. Looking at the CAP system, you can only really have 2 of them at a time. 
+
+Whether or not you enable self preservation determines if you want high consistency and partition tolerence, or if you want availability and partition tolerence. 
 
 
 
