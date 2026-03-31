@@ -158,4 +158,70 @@ Recalling from the Eureka presentation, where we pointed out a potential flaw in
 Here, we will attempt to replicate this by simulating a service crash. 
 
 
+### Step 1: restart client and server
+
+run ```.\mvnw spring-boot:run``` on both the client and server, to come back to the spring page. 
+
+### Step 2: Hard Crash
+
+find the PID of the service application, found in the terminal
+<img width="850" height="441" alt="image" src="https://github.com/user-attachments/assets/06d8b0ba-88ed-469b-8fb4-318f4d8b7af4" />
+
+to simulate a crash, we will use this pid to do that. 
+
+run '''Stop-Process -Id <PID> -Force``` in your powershell
+
+this doesn't send any alerts to the registry 
+
+<img width="1912" height="712" alt="image" src="https://github.com/user-attachments/assets/624eede8-a65e-45ef-8e17-092655d92238" />
+
+<img width="836" height="277" alt="image" src="https://github.com/user-attachments/assets/3452c171-04e4-42b7-a266-6167337f2328" />
+
+since the threshold was 5, and there were only 2, eureka didn't know what to do. and kept a zombie instance up in fear of removing a service that suffered a small hiccup. 
+
+
+## Task 6: Strict Mode
+
+here, we will examine how eureka works when we turn off self preservation
+<img width="640" height="248" alt="image" src="https://github.com/user-attachments/assets/514a6305-6ef7-466c-94ed-bf783383dcf0" />
+
+we turn it to false and also add an eviction timer that sweeps every 5 seconds, which activates after 90 seconds of heartbeats.
+
+### Step 1: Start Client and Server 
+
+run ```.\mvnw spring-boot:run``` on both the client and server, to come back to the spring page. 
+
+
+### Step 2: verify dashboard
+
+we note that in the system status- lease expiration is set to true
+<img width="1703" height="579" alt="image" src="https://github.com/user-attachments/assets/efa1f089-c7bd-4235-9433-796ff8e76a97" />
+
+
+### Step 3: kill and refresh
+
+run '''Stop-Process -Id <PID> -Force``` in your powershell.
+
+
+we see there is no warning text, and the service will remain up for the lease period. 
+<img width="1626" height="633" alt="image" src="https://github.com/user-attachments/assets/c583111d-e12d-4c31-8947-3fa28a42ffa1" />
+
+
+once 90 seconds pass, the service is removed from the list due to the eviction timer passing through 
+
+<img width="1845" height="562" alt="image" src="https://github.com/user-attachments/assets/32c6bf9f-d22c-435d-8a60-03e4d647b941" />
+
+
+
+## Takeaway:
+
+we see that when looking at self preservation mode, eureka can have 2 different strengths.
+
+when self preservation is off, consistency is prioritized. for zombie instances, the registry will immediately remove the service when the lease expires.
+
+when its on, availability is prioritized, with zombie instances in mind, eureka will list the service as up even if its not. 
+
+
+
+
 
