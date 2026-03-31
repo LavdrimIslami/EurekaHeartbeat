@@ -247,4 +247,17 @@ Whether or not you enable self preservation determines if you want high consiste
 
 
 
+### References:
+
+https://cloud.spring.io/spring-cloud-netflix/multi/multi__service_discovery_eureka_clients.html
+
+https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-eureka-server.html
+
+https://www.baeldung.com/eureka-self-preservation-renewal
+
+https://www.geeksforgeeks.org/advance-java/spring-boot-eureka-server/
+
+
+
+
 
