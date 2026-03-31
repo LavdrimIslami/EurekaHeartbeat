@@ -117,7 +117,45 @@ this is what will prevent the registry from removing a service that falls below 
 
 <img width="481" height="345" alt="image" src="https://github.com/user-attachments/assets/54659f81-6df9-4e43-bf2c-9b57e0ecf41f" />
 
+these are a bit similar to the server, but note some things:
 
+we set the ```port``` to 8081
+
+and under ```instance```, we have a setting to prefer IP address, which just saves a headache in cases where we run a vpn. 
+
+most importantly, we have ```eureka.instance.lease-renewal-interval-in-seconds=30```, the basis of what we are testing in this hands on portion. 
+
+
+## Task 3: Start Server and Client
+
+This task is simple, in the service project, run ```.\mvnw spring-boot:run```
+
+and in the server, also run ```.\mvnw spring-boot:run```
+
+<img width="1461" height="377" alt="image" src="https://github.com/user-attachments/assets/28e73eea-7662-4aa1-b50c-6ec0d41091cd" />
+
+once successfull, we go to ```http://localhost:8761/``` and see the following
+
+<img width="1919" height="916" alt="122212121212" src="https://github.com/user-attachments/assets/46252dfa-ac5e-4718-a3b6-c8f156e0f5c9" />
+
+
+note that our dummy service has been successfully registered and show as ```UP```, and we also see our renewal threshold and that lease expiration is not enabled. 
+
+
+## Task 4: Graceful shutdown 
+
+to initiate a graceful shutdown, we can do ```ctrl + C``` in the terminal for our service, doing so sends a cancel signal to eureka, lowering the renewal threshold to 1, and immediately removes the service from the registry. 
+
+<img width="1895" height="646" alt="ydfrsg3et45" src="https://github.com/user-attachments/assets/d92660b7-8323-45d9-a531-5a145061b48e" />
+
+
+## Task 5: Making the Zombie Instance
+
+Recalling from the Eureka presentation, where we pointed out a potential flaw in Eureka's heartbeat mechanism (see diagram).
+
+<img width="1320" height="515" alt="image" src="https://github.com/user-attachments/assets/762f3b8d-4aa7-4463-bfad-e55acb4bb625" />
+
+Here, we will attempt to replicate this by simulating a service crash. 
 
 
 
