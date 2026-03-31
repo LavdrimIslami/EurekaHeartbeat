@@ -94,6 +94,7 @@ we also added two lines that will be explained
       port: 8761  
 this sets the registries communication port. 8761 is the standard for Eureka.
 ```
+```
   server:
     [enable-self-preservation](https://www.baeldung.com/eureka-self-preservation-renewal): true
 
@@ -102,7 +103,19 @@ this is what will prevent the registry from removing a service that falls below 
 
 ```
   client:
-    
+      registerWithEureka: false
+            **stops Eureka from registering itself with a neighbor, because every server is also a client**
+      fetchRegistry: false
+            **stops eureka from fetching the registry it already has from itself**
+      serviceUrl:
+            defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+            **local registry endpoint**
+
+```
+
+### Step 2: Set up Client application.yaml
+
+<img width="481" height="345" alt="image" src="https://github.com/user-attachments/assets/54659f81-6df9-4e43-bf2c-9b57e0ecf41f" />
 
 
 
